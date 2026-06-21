@@ -7,6 +7,7 @@ import {
     fetchPokemon,
     fetchEvolutionChain,
     fetchAbilityData,
+    fetchTCGCards,
 } from "#api";
 
 import {
@@ -325,11 +326,20 @@ displayModal = async (pkmnData) => {
 
         listAbilitiesCache = Array.from(new Set(listAbilitiesCache.map((item) => JSON.stringify(item)))).map((item) => JSON.parse(item));
 
+        // Cartes TCG
+        let tcgCards = [];
+        try {
+            tcgCards = await fetchTCGCards(pkmnData.name.fr);
+        } catch (_e) {
+            tcgCards = [];
+        }
+
         dataCache[pkmnId] = {
             descriptions: listDescriptions,
             extras: pkmnExtraData,
             evolutionLine,
             listAbilities,
+            tcgCards,
         };
     }
 
@@ -754,6 +764,25 @@ displayModal = async (pkmnData) => {
     });
     modal_DOM.nbGames.textContent = ` (${listGames.length})`;
     modal_DOM.listGames.closest("details").inert = listGames.length === 0;
+    
+        // Cartes TCG
+    const tcgCards = dataCache[pkmnId]?.tcgCards || [];
+    const tcgContainer = modal.querySelector("[data-tcg-cards]");
+    const tcgDetails = modal.querySelector("[data-tcg-details]");
+
+    if (tcgDetails) tcgDetails.inert = tcgCards.length === 0;
+
+    if (tcgContainer) {
+        clearTagContent(tcgContainer);
+        tcgCards.forEach((card) => {
+            const img = document.createElement("img");
+            img.src = `${card.image}/low.webp`;
+            img.alt = card.name || "Carte TCG";
+            img.className = "w-24 rounded-md cursor-pointer hover:scale-105 transition-transform";
+            img.loading = "lazy";
+            tcgContainer.append(img);
+        });
+    }
     // Numéros régionaux
     const regionalList = modal.querySelector("[data-list-regional-numbers]");
     if (regionalList) {

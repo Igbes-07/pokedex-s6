@@ -36,3 +36,13 @@ export const fetchAbilityData = async (url) => {
     }
 }
 
+export const fetchTCGCards = async (pkmnNameFr) => {
+    try {
+        const req = await axios.get(
+            `https://api.tcgdex.net/v2/fr/cards?name=${encodeURIComponent(pkmnNameFr)}`
+        );
+        return req.data;
+    } catch (_e) {
+        return [];
+    }
+}
