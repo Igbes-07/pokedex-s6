@@ -11,6 +11,7 @@ import {
 
 import {
     FRENCH_GAMES_NAME,
+    POKEDEX,          // ← ajouter cette ligne
     cleanString,
     clearTagContent,
     replaceImage,
@@ -753,6 +754,19 @@ displayModal = async (pkmnData) => {
     });
     modal_DOM.nbGames.textContent = ` (${listGames.length})`;
     modal_DOM.listGames.closest("details").inert = listGames.length === 0;
+    // Numéros régionaux
+    const regionalList = modal.querySelector("[data-list-regional-numbers]");
+    if (regionalList) {
+        clearTagContent(regionalList);
+        (listDescriptions.pokedex_numbers || []).forEach((entry) => {
+            const regionFr = POKEDEX[entry.pokedex.name];
+            if (!regionFr) return;
+            const li = document.createElement("li");
+            li.textContent = `${regionFr} : #${entry.entry_number}`;
+            regionalList.append(li);
+        });
+        regionalList.closest("details").inert = (listDescriptions.pokedex_numbers || []).length === 0;
+    }
 
     const listRegions = ["alola", "hisui", "galar", "paldea"];
     let listNonRegionalForms = listDescriptions.varieties?.filter((item) => !item.is_default && !listRegions.some((region) => item.pokemon.name.includes(region))) || []

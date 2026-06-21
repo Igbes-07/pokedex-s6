@@ -264,6 +264,15 @@ const loadPokedexForGeneration = async (generation = 1, triggerElement) => {
             aTag.href = url;
             aTag.style.scrollMargin = `${headerPokedex.offsetHeight}px`;
             aTag.dataset.pokemonData = JSON.stringify(item);
+                        // Types en mode liste
+            const typesList = clone.querySelector("[data-pkmn-types]");
+            item.types.forEach((type) => {
+                const li = document.createElement("li");
+                li.textContent = type.name;
+                li.className = "text-xs px-2 py-0.5 rounded-md type-name";
+                li.style.backgroundColor = `var(--type-${cleanString(type.name)})`;
+                typesList.append(li);
+            });
             aTag.dataset.pokemonId = item.pokedex_id;
             aTag.classList.add(
                 ...typesAnimatedBorderColor[`${cleanString(item.types[0].name)}_${cleanString(item.types[1]?.name || item.types?.[0].name)}`].split(",").map((item) => item.trim())
