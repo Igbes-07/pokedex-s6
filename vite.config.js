@@ -74,8 +74,8 @@ export default defineConfig(async ({ mode }) => {
             environment: 'happy-dom',
             css: false,
             setupFiles: ['./tests/setup.js'],
-            reporters: ['html'],
-            outputFile: './vitest-report/index.html'
+            reporters: process.env.CI ? ['default'] : ['html'],
+            outputFile: process.env.CI ? undefined : './vitest-report/index.html'
         },
     };
 });
