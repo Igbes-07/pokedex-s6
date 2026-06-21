@@ -34,5 +34,5 @@ npm run test
 
 ## Membres du groupe
 - Wassila HAMED
-- Anais GOULAMHOUSSEN SATSOU
 - Inès GOUBAA
+- Anais GOULAMHOUSSEN SATSOU
