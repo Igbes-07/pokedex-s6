@@ -351,6 +351,7 @@ export const observeURL = async () => {
 
             await loadPokemonData(pkmnData);
             modal.showModal();
+            return pkmnData;
         } catch (_e) {
             modal.close();
             errorMessageContainer.textContent = `Le Pokémon avec l'id "${pkmnId}" n'existe pas`;
@@ -401,8 +402,15 @@ window.addEventListener("offline", () => {
 
 export { loadPokedexForGeneration };
 
-await observeURL();
+const observedPkmn = await observeURL();
 await loadPokedexForGeneration(1);
+
+// Charger les générations manquantes si le Pokémon est dans une gen > 1
+if (observedPkmn?.generation && Number(observedPkmn.generation) > 1) {
+    for (let gen = 2; gen <= Number(observedPkmn.generation); gen++) {
+        await loadPokedexForGeneration(gen);
+    }
+}
 
 if (pkmnId !== null) {
     const $itemInList = document.querySelector(`[data-pokemon-id="${pkmnId}"]`);
