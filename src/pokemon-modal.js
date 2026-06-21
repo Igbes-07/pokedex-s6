@@ -767,6 +767,14 @@ displayModal = async (pkmnData) => {
         const versionName = FRENCH_GAMES_NAME[item.version.name] || "Unknown";
         li.textContent = versionName;
 
+        // Afficher la jaquette si elle existe
+        const img = document.createElement("img");
+        img.src = `./jaquettes/${item.version.name}.jpg`;
+        img.alt = `Jaquette ${versionName}`;
+        img.className = "w-10 h-auto inline-block mr-2 align-middle";
+        img.onerror = () => img.remove();
+
+        li.prepend(img);
         modal_DOM.listGames.append(li);
     });
     modal_DOM.nbGames.textContent = ` (${listGames.length})`;
