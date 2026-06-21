@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $cleanName = iconv('UTF-8', 'ASCII//TRANSLIT', $cleanName);
             $cleanName = preg_replace('/[^a-z0-9-]/', '-', $cleanName);
 
-            $dest = __DIR__ . "/../public/jaquettes/{$cleanName}.{$ext}";
+            $dest = __DIR__ . "/../jaquettes/{$cleanName}.{$ext}";
             if (move_uploaded_file($file['tmp_name'], $dest)) {
                 $message = "✅ Jaquette uploadée : {$cleanName}.{$ext}";
             } else {
