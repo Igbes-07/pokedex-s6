@@ -769,10 +769,16 @@ displayModal = async (pkmnData) => {
 
         // Afficher la jaquette si elle existe
         const img = document.createElement("img");
-        img.src = `./jaquettes/${item.version.name}.jpg`;
+        img.src = `./jaquettes/${item.version.name}.png`;
         img.alt = `Jaquette ${versionName}`;
         img.className = "w-10 h-auto inline-block mr-2 align-middle";
-        img.onerror = () => img.remove();
+        img.onerror = () => {
+            img.src = `./jaquettes/${item.version.name}.jpg`;
+            img.onerror = () => {
+                img.src = `./jaquettes/${item.version.name}.avif`;
+                img.onerror = () => img.remove();
+            };
+        };
 
         li.prepend(img);
         modal_DOM.listGames.append(li);
