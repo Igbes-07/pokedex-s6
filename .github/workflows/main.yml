@@ -58,3 +58,20 @@ jobs:
           remote_host: ${{ secrets.SSH_HOST }}
           remote_user: ${{ secrets.SSH_USER }}
           remote_key: ${{ secrets.SSH_KEY }}
+      - name: Déployer dossier admin (PHP)
+        uses: burnett01/rsync-deployments@7.0.1
+        with:
+          switches: -avzr
+          path: admin/
+          remote_path: /home/hamedwassila/www/pokedex-s6/admin/
+          remote_host: ${{ secrets.SSH_HOST }}
+          remote_user: ${{ secrets.SSH_USER }}
+          remote_key: ${{ secrets.SSH_KEY }}
+
+      - name: Créer dossier jaquettes sur le serveur
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: mkdir -p /home/hamedwassila/www/pokedex-s6/jaquettes
