@@ -92,6 +92,15 @@ const resetModalPosition = () => {
 
 modal.addEventListener("close", async (e) => {
     const url = new URL(location);
+
+    // Réinitialiser le favicon
+    const favicon = document.querySelector("[data-favicon]");
+    if (favicon) favicon.href = "/favicon.png";
+
+    // Réinitialiser le theme-color
+    const metaTheme = document.querySelector("meta[name='theme-color']");
+    if (metaTheme) metaTheme.content = "#0f172a";
+
     if (
         "documentPictureInPicture" in window && window.documentPictureInPicture.window
     ) {
@@ -349,11 +358,27 @@ displayModal = async (pkmnData) => {
     }
 
     modal_DOM.category.textContent = pkmnData.category;
+    // Favicon = sprite du Pokémon
+    const favicon = document.querySelector("[data-favicon]");
+    if (favicon) favicon.href = pkmnData.sprites.regular;
+
+    // Meta theme-color selon le type du Pokémon  
+    const firstTypeColor = window.getComputedStyle(document.body)
+        .getPropertyValue(`--type-${cleanString(pkmnData.types[0].name)}`).trim();
+    const metaTheme = document.querySelector("meta[name='theme-color']");
+    if (metaTheme && firstTypeColor) metaTheme.content = firstTypeColor;
+
         // Lien Poképédia
     const pokepediaLink = modal.querySelector("[data-pokepedia-link]");
     if (pokepediaLink) {
         const nomFr = pkmnData.name.fr.replace(/ /g, "_");
         pokepediaLink.href = `https://www.pokepedia.fr/${nomFr}`;
+    }
+
+        // Noms étrangers
+    const foreignNames = modal.querySelector("[data-foreign-names]");
+    if (foreignNames) {
+        foreignNames.textContent = `🇬🇧 ${pkmnData.name.en}  •  🇯🇵 ${pkmnData.name.jp}`;
     }
 
     clearTagContent(modal_DOM.listTypes);
