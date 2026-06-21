@@ -349,6 +349,12 @@ displayModal = async (pkmnData) => {
     }
 
     modal_DOM.category.textContent = pkmnData.category;
+        // Lien Poképédia
+    const pokepediaLink = modal.querySelector("[data-pokepedia-link]");
+    if (pokepediaLink) {
+        const nomFr = pkmnData.name.fr.replace(/ /g, "_");
+        pokepediaLink.href = `https://www.pokepedia.fr/${nomFr}`;
+    }
 
     clearTagContent(modal_DOM.listTypes);
 
