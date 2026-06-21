@@ -1,4 +1,5 @@
 import 'core-js/actual/object';
+import WaveSurfer from "wavesurfer.js";
 
 import {
     fetchPokemonDetails,
@@ -38,6 +39,8 @@ import modalPulldownClose from "#src/modal-pulldown-close.js"
 import { listPokemon, setTitleTagForGeneration, hasReachPokedexEnd, rippleEffect } from "./main";
 import loadingImage from "/images/loading.svg";
 import loadingImageRaw from "/images/loading.svg?raw";
+
+let wavesurfer = null;
 
 const closeModalBtn = document.querySelector("[data-close-modal]");
 
@@ -257,6 +260,10 @@ displayModal = async (pkmnData) => {
         $itemInList.classList.add("selected");
     }
 
+    if (wavesurfer) {
+    wavesurfer.destroy();
+    wavesurfer = null;
+}
     modal_DOM.img.src = loadingImage;
 
     const pkmnId = pkmnData?.alternate_form_id || pkmnData.pokedex_id;
@@ -899,6 +906,25 @@ displayModal = async (pkmnData) => {
 
     clearTagContent(modal_DOM.listSiblings);
     generatePokemonSiblingsUI(pkmnData);
+        // Création WaveSurfer pour le cri
+    const cryUrl = pkmnExtraData?.cries?.latest || pkmnExtraData?.cries?.legacy;
+    const waveformContainer = modal.querySelector("[data-waveform]");
+
+    if (cryUrl && waveformContainer) {
+        wavesurfer = WaveSurfer.create({
+            container: waveformContainer,
+            waveColor: firstBorderColor,
+            progressColor: secondaryBorderColor || firstBorderColor,
+            height: 60,
+            url: cryUrl,
+        });
+        wavesurfer.on("ready", () => wavesurfer.play());
+
+        const playBtn = modal.querySelector("[data-play-cry]");
+        if (playBtn) {
+            playBtn.onclick = () => wavesurfer.play();
+        }
+    }
     modal.inert = false;
     modal.setAttribute("aria-busy", false);
 };
