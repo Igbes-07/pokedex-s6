@@ -1,9 +1,13 @@
 import axios from "axios";
 
+const TYRADEX_BASE = import.meta.env.DEV
+    ? "/tyradex-proxy"
+    : "https://tyradex.app";
+
 export const fetchPokemonForGeneration = async (generation = 1) => {
     let listPokemon = [];
     try {
-        const req = await axios.get(`https://tyradex.vercel.app/api/v1/gen/${generation}`);
+        const req = await axios.get(`${TYRADEX_BASE}/api/v1/gen/${generation}`);
         listPokemon = req.data;
         const serverErrorStartNumber = 400;
         if(req.data?.status >= serverErrorStartNumber) {
@@ -19,7 +23,7 @@ export const fetchPokemonForGeneration = async (generation = 1) => {
 export const fetchPokemon = async (pkmnId, region = null) => {
     try {
         const regionName = region ? `/${region}` : "";
-        const req = await axios.get(`https://tyradex.vercel.app/api/v1/pokemon/${pkmnId}${regionName}`);
+        const req = await axios.get(`${TYRADEX_BASE}/api/v1/pokemon/${pkmnId}${regionName}`);
 
         return req.data;
     } catch (error) {
@@ -29,7 +33,7 @@ export const fetchPokemon = async (pkmnId, region = null) => {
 
 export const fetchAllTypes = async () => {
     try {
-        const req = await axios.get("https://tyradex.app/api/v1/types");
+        const req = await axios.get(`${TYRADEX_BASE}/api/v1/types`);
         return req.data;
     } catch (error) {
         throw new Error(error);

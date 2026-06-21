@@ -32,6 +32,13 @@ export default defineConfig({
         // Expose the server to the network allowing access from ip address
         host: true,
         open: true,
+        proxy: {
+            '/tyradex-proxy': {
+                target: 'https://tyradex.app',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/tyradex-proxy/, ''),
+            }
+        }
     },
     test: {
         exclude: [
@@ -44,5 +51,8 @@ export default defineConfig({
         ],
         environment: 'happy-dom',
         css: false,
+        setupFiles: ['./tests/setup.js'],
+        reporters: ['html'],
+        outputFile: './vitest-report/index.html'
     },
 });
