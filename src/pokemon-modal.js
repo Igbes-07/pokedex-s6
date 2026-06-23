@@ -376,9 +376,6 @@ displayModal = async (pkmnData) => {
     }
 
     modal_DOM.category.textContent = pkmnData.category;
-    // Favicon = sprite du Pokémon
-    const favicon = document.querySelector("[data-favicon]");
-    if (favicon) favicon.href = pkmnData.sprites.regular;
 
     // Meta theme-color selon le type du Pokémon  
     const firstTypeColor = window.getComputedStyle(document.body)
@@ -939,6 +936,9 @@ displayModal = async (pkmnData) => {
             playBtn.onclick = () => wavesurfer.play();
         }
     }
+    const faviconFinal = document.querySelector("[data-favicon]");
+    if (faviconFinal) faviconFinal.href = pkmnData.sprites.regular;
+
     modal.inert = false;
     modal.setAttribute("aria-busy", false);
 };
