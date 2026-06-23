@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($file && $game && $file['error'] === 0) {
         $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-        $allowedExt = ['jpg', 'jpeg', 'png', 'webp'];
+        $allowedExt = ['jpg', 'jpeg', 'png', 'webp', 'avif'];
 
         if (in_array($ext, $allowedExt)) {
             // Sanitize le nom
