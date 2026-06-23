@@ -38,6 +38,7 @@ $games = [
 ];
 
 $message = "";
+$messageType = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $game = $_POST['game'] ?? '';
@@ -48,22 +49,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $allowedExt = ['jpg', 'jpeg', 'png', 'webp', 'avif'];
 
         if (in_array($ext, $allowedExt)) {
-            // Sanitize le nom
             $cleanName = strtolower($game);
             $cleanName = iconv('UTF-8', 'ASCII//TRANSLIT', $cleanName);
             $cleanName = preg_replace('/[^a-z0-9-]/', '-', $cleanName);
 
             $dest = __DIR__ . "/../jaquettes/{$cleanName}.{$ext}";
             if (move_uploaded_file($file['tmp_name'], $dest)) {
-                $message = "✅ Jaquette uploadée : {$cleanName}.{$ext}";
+                $message = "✅ Jaquette uploadée avec succès : {$cleanName}.{$ext}";
+                $messageType = "success";
             } else {
                 $message = "❌ Erreur lors de l'upload.";
+                $messageType = "error";
             }
         } else {
-            $message = "❌ Format non autorisé. JPG, PNG ou WEBP uniquement.";
+            $message = "❌ Format non autorisé. JPG, PNG, WEBP ou AVIF uniquement.";
+            $messageType = "error";
         }
     } else {
         $message = "❌ Veuillez sélectionner un jeu et une image.";
+        $messageType = "error";
     }
 }
 ?>
@@ -72,35 +76,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Admin - Upload Jaquettes</title>
-    <style>
-        body { font-family: sans-serif; max-width: 600px; margin: 40px auto; padding: 0 20px; }
-        h1 { font-size: 24px; }
-        select, input, button { display: block; width: 100%; margin: 10px 0; padding: 8px; font-size: 16px; }
-        button { background: #0f172a; color: white; border: none; cursor: pointer; border-radius: 6px; }
-        button:hover { background: #1e293b; }
-        .message { padding: 10px; border-radius: 6px; margin: 10px 0; background: #f0fdf4; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Upload Jaquettes | Pokédex</title>
+    <link rel="stylesheet" href="./admin.css">
 </head>
 <body>
-    <h1>Upload Jaquettes</h1>
 
-    <?php if ($message): ?>
-        <p class="message"><?= htmlspecialchars($message) ?></p>
-    <?php endif; ?>
+    <header>
+        <div class="header-inner">
+            <h1>Pokédex - Administration</h1>
+            <a href="../index.html">← Retour au Pokédex</a>
+        </div>
+    </header>
 
-    <form method="POST" enctype="multipart/form-data">
-        <label>Jeu :</label>
-        <select name="game">
-            <?php foreach ($games as $key => $label): ?>
-                <option value="<?= $key ?>"><?= htmlspecialchars($label) ?></option>
-            <?php endforeach; ?>
-        </select>
+    <main>
+        <h2>Upload Jaquettes</h2>
 
-        <label>Image de la jaquette :</label>
-        <input type="file" name="jaquette" accept="image/*">
+        <div class="form-card">
+            <?php if ($message): ?>
+                <p class="message <?= $messageType ?>"><?= htmlspecialchars($message) ?></p>
+            <?php endif; ?>
 
-        <button type="submit">Uploader</button>
-    </form>
+            <form method="POST" enctype="multipart/form-data">
+                <label for="game">Jeu :</label>
+                <select name="game" id="game">
+                    <?php foreach ($games as $key => $label): ?>
+                        <option value="<?= $key ?>"><?= htmlspecialchars($label) ?></option>
+                    <?php endforeach; ?>
+                </select>
+
+                <label for="jaquette">Image de la jaquette :</label>
+                <input type="file" name="jaquette" id="jaquette" accept="image/*">
+
+                <button type="submit">Uploader la jaquette</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-logos">
+            <img src="../images/CY_IUT_coul.svg" alt="Logo IUT">
+            <img src="../images/CY_Cergy_Paris_Universite_coul.svg" alt="Logo CY Cergy Paris Université">
+        </div>
+        <p>Année universitaire 2024-2025</p>
+    </footer>
+
 </body>
 </html>

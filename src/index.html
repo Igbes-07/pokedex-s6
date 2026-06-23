@@ -25,8 +25,15 @@
         </div>
         <header class="py-2 bg-slate-900 text-white">
             <div class="mr-[max(env(safe-area-inset-right),_theme(space.3))] ml-[max(env(safe-area-inset-left),_theme(space.3))]">
-                <div class="mx-auto max-w-6xl">
+                <div class="mx-auto max-w-6xl flex justify-between items-center">
                     <h1>Pokédex v%VERSION% - TP CI/CD</h1>
+                    <a 
+                        href="./admin/upload.php" 
+                        target="_blank"
+                        class="text-xs px-3 py-1 rounded-md border border-white hocus:bg-white hocus:text-slate-900 transition-colors"
+                    >
+                        Admin 
+                    </a>
                 </div>
             </div>
         </header>
